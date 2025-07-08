@@ -15,11 +15,13 @@ import org.example.uploadservice.constant.UploadType;
 @AllArgsConstructor
 
 public class MediaResponse {
-    @Column(name = "media_url", nullable = false)
+
     private String mediaUrl;
 
-    @Column(name = "media_type")
     private String mediaType;
+
+    private String publicID;
+
 
     @Enumerated(EnumType.STRING)
     @Column(name = "upload_type", length = 20)

@@ -35,6 +35,10 @@ public class Media {
     @Column(name = "media_type")
     private String mediaType;
 
+    @Column(name = "public_id")
+    private String publicId;
+
+
     @Enumerated(EnumType.STRING)
     @Column(name = "upload_type", length = 20)
     private UploadType uploadType;
