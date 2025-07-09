@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class APIResponse <T> {
-    private int status;
+    private int code;
     private String message;
     private T data;
 
