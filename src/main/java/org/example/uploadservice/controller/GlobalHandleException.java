@@ -24,5 +24,5 @@ public class GlobalHandleException {
     public ResponseEntity<?> handleIOEException(MaxUploadSizeExceededException exc) {
         return GenerateResponse.generateErrorResponse(HttpStatus.BAD_REQUEST.value(), exc.getMessage());
     }
-=======
+
 }
