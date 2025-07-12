@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class GenerateMedia {
+  
     public static MediaResponse generateMediaResponse(Media media) {
 
         if (media == null) {
@@ -24,6 +25,7 @@ public class GenerateMedia {
 
     public static MediaResponse generateMedia
             (Map resul, String mediaType, MediaRepository mediaRepository) {
+
 
         String url = resul.get("secure_url").toString();
         String publicId = resul.get("public_id").toString();

@@ -25,10 +25,12 @@ public class MediaController {
                     404, "public_id is required");
         }
         return uploadServiceImp.uploadMedia(file);
+
     }
 
     @PostMapping("/multifile")
     public ResponseEntity<?> sentFileUploads(
+
             @RequestParam("files") MultipartFile[] files
     ) throws IOException {
         if (files == null) {
@@ -57,6 +59,5 @@ public class MediaController {
         return uploadServiceImp.deleteMultiMedia(ids);
 
     }
-
 
 }
