@@ -9,30 +9,33 @@ import java.util.Map;
 import java.util.UUID;
 
 public class GenerateMedia {
-    public static MediaResponse generateMediaResponse(String mediaUrl, String mediaType , String publicId) {
-        MediaResponse mediaResponse = new MediaResponse();
-        mediaResponse.setMediaUrl(mediaUrl);
-        mediaResponse.setMediaType(mediaType);
-        mediaResponse.setUploadType(UploadType.DRAFT);
-        mediaResponse.setPublicID(publicId);
+    public static MediaResponse generateMediaResponse(Media media) {
 
-        return mediaResponse;
+        if (media == null) {
+            return new MediaResponse();
+        }
+
+        return MediaResponse.builder()
+                .id(media.getId())
+                .mediaUrl(media.getMediaUrl())
+                .mediaType(media.getMediaType())
+                .build();
     }
 
-    public static MediaResponse generateMedia(Map resul, UUID userId, Long postId,
-                                      String mediaType, MediaRepository mediaRepository) {
+    public static MediaResponse generateMedia
+            (Map resul, String mediaType, MediaRepository mediaRepository) {
 
         String url = resul.get("secure_url").toString();
         String publicId = resul.get("public_id").toString();
 
-        Media media = new Media();
-        media.setMediaUrl(url);
-        media.setMediaType(mediaType);
-        media.setUploadType(UploadType.DRAFT);
-        media.setPublicId(publicId);
-        media.setPostId(postId);
-        media.setUserId(userId);
-        mediaRepository.save(media);
-        return generateMediaResponse(url,mediaType, publicId);
+        Media media = mediaRepository.save(
+                Media.builder()
+                        .mediaUrl(url)
+                        .publicId(publicId)
+                        .mediaType(mediaType)
+                        .uploadType(UploadType.DRAFT)
+                        .build());
+
+        return generateMediaResponse(media);
     }
 }

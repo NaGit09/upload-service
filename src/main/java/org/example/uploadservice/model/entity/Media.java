@@ -24,11 +24,6 @@ public class Media {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id" , nullable = false)
-    private UUID userId;
-    @Column(name = "post_id", nullable = false)
-    private Long postId;
-
     @Column(name = "media_url", nullable = false)
     private String mediaUrl;
 
@@ -37,7 +32,6 @@ public class Media {
 
     @Column(name = "public_id")
     private String publicId;
-
 
     @Enumerated(EnumType.STRING)
     @Column(name = "upload_type", length = 20)

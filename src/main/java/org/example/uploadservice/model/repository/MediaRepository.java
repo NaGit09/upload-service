@@ -12,7 +12,4 @@ import java.util.UUID;
 public interface MediaRepository extends JpaRepository<Media, Long> {
     Optional<Media> findByPublicId(String publicId);
 
-    Optional<Media> findByPostId(Long postId);
-
-    Optional<Media> findByUserId(UUID userId);
 }

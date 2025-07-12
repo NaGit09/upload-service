@@ -28,10 +28,10 @@ public class UploadServiceImp implements IUploadService {
 
     @Override
     public ResponseEntity<?> uploadMedia
-            (MultipartFile file, Long postId, UUID userId)
+            (MultipartFile file)
             throws IOException {
 
-        if (file == null || file.isEmpty() || postId == null || userId == null) {
+        if (file == null || file.isEmpty()) {
             return GenerateResponse.generateErrorResponse(
                     400, "Invalid upload data.");
         }
@@ -39,10 +39,10 @@ public class UploadServiceImp implements IUploadService {
         var uploadResult = cloudinary.uploader().
                 upload(file.getBytes(), ObjectUtils.emptyMap());
 
-        System.out.println(uploadResult.toString());
         String fileType = file.getContentType();
+
         MediaResponse mediaResponse = GenerateMedia.generateMedia
-                (uploadResult, userId, postId, fileType, mediaRepository);
+                (uploadResult, fileType, mediaRepository);
 
         return GenerateResponse.generateSuccessResponse(
                 200, "Upload file success", mediaResponse);
@@ -51,10 +51,10 @@ public class UploadServiceImp implements IUploadService {
 
     @Override
     public ResponseEntity<?> uploadMultiMedia
-            (MultipartFile[] files, Long postId, UUID userId)
+            (MultipartFile[] files)
             throws IOException {
 
-        if (files == null || postId == null || userId == null) {
+        if (files == null) {
             return GenerateResponse.generateErrorResponse(
                     400, "Missing required fields or files.");
         }
@@ -64,10 +64,13 @@ public class UploadServiceImp implements IUploadService {
         for (MultipartFile file : files) {
             if (file.isEmpty()) continue;
 
-            var uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+            var uploadResult = cloudinary.uploader().
+                    upload(file.getBytes(), ObjectUtils.emptyMap());
+
             String fileType = file.getContentType();
+
             MediaResponse mediaResponse = GenerateMedia.generateMedia
-                    (uploadResult, userId, postId, fileType, mediaRepository);
+                    (uploadResult, fileType, mediaRepository);
             mediaResponses.add(mediaResponse);
         }
 
@@ -77,78 +80,32 @@ public class UploadServiceImp implements IUploadService {
 
 
     @Override
-    public ResponseEntity<?> deleteMedia(String publicId) throws IOException {
-        Optional<Media> mediaOpt = mediaRepository.findByPublicId(publicId);
-        if (mediaOpt.isEmpty()) {
-            return GenerateResponse.generateErrorResponse(401, "find not found media ");
-        }
-        Media media = mediaOpt.get();
+    public ResponseEntity<?> deleteMultiMedia(Long[] ids) {
 
-        var deleteResult = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
-        boolean result = "ok".equals(deleteResult.get("result"));
-
-        mediaRepository.delete(media);
-        if (!result) {
-            return GenerateResponse.generateErrorResponse(401, "delete media failed");
+        if (ids == null || ids.length == 0) {
+            return GenerateResponse.generateErrorResponse(
+                    400, "Missing required fields or files.");
         }
+
+        Arrays.stream(ids).forEach(mediaRepository::deleteById);
 
         return GenerateResponse.generateSuccessResponse(
-                200, "deleted successfully", true
-        );
+                200, "File deleted !", true);
     }
 
-    @Override
-    public ResponseEntity<?> deleteMultiMedia(String publicId, UUID userId) throws IOException {
-        return null;
-    }
 
     @Override
-    public ResponseEntity<?> deleteByPostId(Long postId) throws IOException {
-        Optional<Media> mediaOpt = mediaRepository.findByPostId(postId);
-        if (mediaOpt.isEmpty()) {
-            return GenerateResponse.generateErrorResponse(401, "find not found media ");
+    public ResponseEntity<?> deleteMedia(Long id) {
+        if (id == null) {
+            return GenerateResponse.generateErrorResponse(
+                    400, "Missing required fields or files."
+            );
         }
-        Media media = mediaOpt.get();
-        String publicId = media.getPublicId();
-        var deleteResult = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
-        boolean result = "ok".equals(deleteResult.get("result"));
-        mediaRepository.delete(media);
-        if (!result) {
-            return GenerateResponse.generateErrorResponse(401, "delete media failed");
-
-        }
+        mediaRepository.deleteById(id);
         return GenerateResponse.generateSuccessResponse(
-                200, "deleted successfully", true
-        );
+                200, "File deleted !", true);
+
     }
 
-    @Override
-    public ResponseEntity<?> deleteByUserId(UUID userId) throws IOException {
-        Optional<Media> mediaOpt = mediaRepository.findByUserId(userId);
-        if (mediaOpt.isEmpty()) {
-            return GenerateResponse.generateErrorResponse(401, "find not found media ");
-        }
-        Media media = mediaOpt.get();
-        String publicId = media.getPublicId();
-        var deleteResult = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
-        boolean result = "ok".equals(deleteResult.get("result"));
-        mediaRepository.delete(media);
-        if (!result) {
-            return GenerateResponse.generateErrorResponse(401, "delete media failed");
 
-        }
-        return GenerateResponse.generateSuccessResponse(
-                200, "deleted successfully", true
-        );
-    }
-
-    @Override
-    public ResponseEntity<?> getMediaPost(Long postId) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<?> getAvatar(UUID userId) {
-        return null;
-    }
 }

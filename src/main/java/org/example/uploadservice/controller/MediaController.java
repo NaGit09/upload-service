@@ -18,43 +18,45 @@ public class MediaController {
 
     @PostMapping("/single")
     public ResponseEntity<?> sentFileUpload(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam("postId") Long postId,
-            @RequestParam("userId") UUID userId
+            @RequestParam("file") MultipartFile file
     ) throws IOException {
-        return uploadServiceImp.uploadMedia(file, postId, userId);
+        if (file == null) {
+            return GenerateResponse.generateErrorResponse(
+                    404, "public_id is required");
+        }
+        return uploadServiceImp.uploadMedia(file);
     }
 
     @PostMapping("/multifile")
     public ResponseEntity<?> sentFileUploads(
-            @RequestParam("files") MultipartFile[] files,
-            @RequestParam("postId") Long postId,
-            @RequestParam("userId") UUID userId
+            @RequestParam("files") MultipartFile[] files
     ) throws IOException {
-        return uploadServiceImp.uploadMultiMedia(files, postId, userId);
+        if (files == null) {
+            return GenerateResponse.generateErrorResponse(
+                    404, "public_id is required");
+        }
+        return uploadServiceImp.uploadMultiMedia(files);
     }
 
-    @DeleteMapping("/delete/{publicId}")
-    public ResponseEntity<?> DeleteFile(@PathVariable String publicId) throws IOException {
-        if (publicId == null) {
-            return GenerateResponse.generateErrorResponse(404, "public_id is required");
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> DeleteFile(@PathVariable Long id) throws IOException {
+        if (id == null) {
+            return GenerateResponse.generateErrorResponse(
+                    404, "public_id is required");
         }
-        return uploadServiceImp.deleteMedia(publicId);
+        return uploadServiceImp.deleteMedia(id);
     }
 
-    @DeleteMapping("/deletePost/{postId}")
-    public ResponseEntity<?> DeleteFilePost(@PathVariable Long postId) throws IOException {
-        if (postId == null) {
-            return GenerateResponse.generateErrorResponse(404, "public_id is required");
+    @DeleteMapping("/delete-all")
+    public ResponseEntity<?> DeleteAllFiles(@RequestBody Long[] ids) throws IOException {
+        if (ids == null) {
+            return GenerateResponse.generateErrorResponse(
+                    404, "public_id is required");
         }
-        return uploadServiceImp.deleteByPostId(postId);
+
+        return uploadServiceImp.deleteMultiMedia(ids);
+
     }
 
-    @DeleteMapping("/deletePost/{userID}")
-    public ResponseEntity<?> sentFileDelete(@PathVariable UUID userID) throws IOException {
-        if (userID == null) {
-            return GenerateResponse.generateErrorResponse(404, "public_id is required");
-        }
-        return uploadServiceImp.deleteByUserId(userID);
-    }
+
 }

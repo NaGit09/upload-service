@@ -16,14 +16,8 @@ import org.example.uploadservice.constant.UploadType;
 
 public class MediaResponse {
 
+    private Long id;
     private String mediaUrl;
-
     private String mediaType;
 
-    private String publicID;
-
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "upload_type", length = 20)
-    private UploadType uploadType;
 }
