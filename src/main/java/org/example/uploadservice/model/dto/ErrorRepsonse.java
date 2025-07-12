@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ErrorRepsonse {
+
     private int code;
+
     private String message;
 }
 

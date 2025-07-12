@@ -44,6 +44,7 @@ public class UploadServiceImp implements IUploadService {
         MediaResponse mediaResponse = GenerateMedia.generateMedia
                 (uploadResult, fileType, mediaRepository);
 
+
         return GenerateResponse.generateSuccessResponse(
                 200, "Upload file success", mediaResponse);
 
@@ -51,6 +52,7 @@ public class UploadServiceImp implements IUploadService {
 
     @Override
     public ResponseEntity<?> uploadMultiMedia
+
             (MultipartFile[] files)
             throws IOException {
 
@@ -71,6 +73,7 @@ public class UploadServiceImp implements IUploadService {
 
             MediaResponse mediaResponse = GenerateMedia.generateMedia
                     (uploadResult, fileType, mediaRepository);
+
             mediaResponses.add(mediaResponse);
         }
 
@@ -80,6 +83,7 @@ public class UploadServiceImp implements IUploadService {
 
 
     @Override
+
     public ResponseEntity<?> deleteMultiMedia(Long[] ids) {
 
         if (ids == null || ids.length == 0) {
