@@ -24,5 +24,8 @@ public class GlobalHandleException {
     public ResponseEntity<?> handleIOEException(MaxUploadSizeExceededException exc) {
         return GenerateResponse.generateErrorResponse(HttpStatus.BAD_REQUEST.value(), exc.getMessage());
     }
-
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<?> handleRuntimeException(MaxUploadSizeExceededException exc) {
+        return GenerateResponse.generateErrorResponse(HttpStatus.BAD_REQUEST.value(), exc.getMessage());
+    }
 }

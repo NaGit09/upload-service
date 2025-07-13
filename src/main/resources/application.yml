@@ -27,9 +27,9 @@ spring:
           auto: none
 
 cloudinary:
-  cloud-name: hura
-  api-key: hura
-  api-secret: hura
+  cloud-name: dtnffqndg
+  api-key: 816752284448864
+  api-secret: vrdtjR-phtr3delMKfR2s-3wdX8
 
 
 eureka:

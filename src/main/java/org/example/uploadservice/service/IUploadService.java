@@ -7,12 +7,13 @@ import java.io.IOException;
 
 
 public interface IUploadService {
-    ResponseEntity<?> uploadMedia(MultipartFile file) throws IOException;
 
-    ResponseEntity<?> uploadMultiMedia(MultipartFile[] files) throws IOException;
+    ResponseEntity<?> uploadMedia(MultipartFile[] files) throws IOException;
 
-    ResponseEntity<?> deleteMedia(Long id) throws IOException;
+    ResponseEntity<?> deleteMedia(Long [] ids ) throws IOException;
 
-    ResponseEntity<?> deleteMultiMedia(Long [] id ) throws IOException;
+    ResponseEntity <?> updateMedia(Long [] ids ) ;
+
+    ResponseEntity <?> deleteDraft() ;
 
 }

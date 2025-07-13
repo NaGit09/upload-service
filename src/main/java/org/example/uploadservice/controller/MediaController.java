@@ -16,38 +16,16 @@ public class MediaController {
     @Autowired
     private UploadServiceImp uploadServiceImp;
 
-    @PostMapping("/single")
-    public ResponseEntity<?> sentFileUpload(
-            @RequestParam("file") MultipartFile file
-    ) throws IOException {
-        if (file == null) {
-            return GenerateResponse.generateErrorResponse(
-                    404, "public_id is required");
-        }
-        return uploadServiceImp.uploadMedia(file);
-
-    }
-
-    @PostMapping("/multifile")
+    @PostMapping("/files")
     public ResponseEntity<?> sentFileUploads(
-
-            @RequestParam("files") MultipartFile[] files
-    ) throws IOException {
+            @RequestParam("files") MultipartFile[] files) {
         if (files == null) {
             return GenerateResponse.generateErrorResponse(
                     404, "public_id is required");
         }
-        return uploadServiceImp.uploadMultiMedia(files);
+        return uploadServiceImp.uploadMedia(files);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> DeleteFile(@PathVariable Long id) throws IOException {
-        if (id == null) {
-            return GenerateResponse.generateErrorResponse(
-                    404, "public_id is required");
-        }
-        return uploadServiceImp.deleteMedia(id);
-    }
 
     @DeleteMapping("/delete-all")
     public ResponseEntity<?> DeleteAllFiles(@RequestBody Long[] ids) throws IOException {
@@ -56,8 +34,22 @@ public class MediaController {
                     404, "public_id is required");
         }
 
-        return uploadServiceImp.deleteMultiMedia(ids);
+        return uploadServiceImp.deleteMedia(ids);
 
     }
 
+    @GetMapping("/delete-draft")
+    public ResponseEntity<?> deleteDraft() {
+        return uploadServiceImp.deleteDraft();
+    }
+    @PutMapping("/update-draft")
+    public ResponseEntity<?> updateDraft(@RequestBody Long[] ids) {
+        if (ids == null) {
+            return GenerateResponse.generateErrorResponse(
+                    404, "public_id is required"
+            );
+
+        }
+        return uploadServiceImp.updateMedia(ids);
+    }
 }
